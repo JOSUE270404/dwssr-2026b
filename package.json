@@ -4,7 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "DEBUG=dwssr-2026b:*  node ./server/bin/www.js",
+    "start": " node ./server/bin/www.js",
+    "dev": "DEBUG=dwssr-2026b:*  node ./server/bin/www.js",
     "greet": "echo 'Hola mundo'"
   },
   "dependencies": {
