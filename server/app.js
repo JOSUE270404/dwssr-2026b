@@ -1,22 +1,25 @@
 //funcion para mejerar errores en la aplicación
-//❌var createError = require('http-errors');
 import createError from 'http-errors';
 //importa el framework express
-//❌var express = require('express');
 import express from 'express';
 //importa modulos para manejar rutas, cookies, logs y path
-//❌var path = require('path');
 import path from 'node:path';
 //importa modulos para manejar cookies
-//❌ var cookieParser = require('cookie-parser');
 import cookieParser from 'cookie-parser';
 //importa modulos para manejar logs
-//❌ var logger = require('morgan');
 import logger from 'morgan';
+//imports para crear Dirname
+import { fileURLToPath } from 'node:url';
+import{dirname} from 'node:path';
+//creando la variable
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 //importa las rutas de laaplicacion 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+//var indexRouter = require('./routes/index');
+import indexRouter from './routes/index.js';
+//var usersRouter = require('./routes/users');
+import usersRouter from './routes/users.js';
 
 //crea la aplicacion express
 var app = express();
@@ -52,4 +55,5 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-module.exports = app;
+//module.exports = app;
+export default app;
