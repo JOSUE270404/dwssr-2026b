@@ -22,9 +22,9 @@ const __dirname = dirname(__filename);
 
 //importa las rutas de laaplicacion 
 //var indexRouter = require('./routes/index');
-import indexRouter from './routes/index.js';
+import indexRouter from '#routes/index.js';
 //var usersRouter = require('./routes/users');
-import usersRouter from './routes/users.js';
+import usersRouter from '#routes/users.js';
 
 //crea la aplicacion express
 debug('🧨Creando backend')
