@@ -13,6 +13,8 @@ import createDebug from "debug" //👈
 //imports para crear Dirname
 import { fileURLToPath } from 'node:url';
 import{dirname} from 'node:path';
+//importando el template de engine Handlebars
+import hbs from 'hbs';
 
 //creacion del objeto Debug
 const debug = createDebug('dwssr-2026b:server'); //👈
@@ -25,6 +27,8 @@ const __dirname = dirname(__filename);
 import indexRouter from '#routes/index.js';
 //var usersRouter = require('./routes/users');
 import usersRouter from '#routes/users.js';
+//importando el registrador del helper 
+import { registerViteAssetsHelper } from '#lib/vite.js';
 
 //crea la aplicacion express
 debug('🧨Creando backend')
@@ -34,12 +38,20 @@ var app = express();
 // configura el motor de vistas
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
+//Registro Helper
+registerViteAssetsHelper(hbs);
 
 //configura los middlewares de la aplicacion (software intermedio que se ejecuta antes de las rutas)
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+
+//archivos estaticos de la produccion
+if (process.env.NODE_ENV === 'production') {
+app.use(express.static(path.join(__dirname,'..', 'dist')));
+}
+
 //configura la carpeta de archivos estaticos
 debug('🧨Creando servidor de archivos estaticos')
 app.use(express.static(path.join(__dirname,'..', 'public')));
