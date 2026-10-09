@@ -2,4 +2,4 @@
 import './styles/main.css'
 
 //imprimiendo en conlola
-console.log("🎉VITE ⚡")
+console.log("🎉VITE ⚡ EXPRESS 🚂 Working!!")
