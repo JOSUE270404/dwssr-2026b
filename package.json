@@ -4,8 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start": " NODE_ENV=production node ./server/bin/www.js",
-    "dev": "DEBUG=dwssr-2026b:*  nodemon ./server/bin/www.js",
+    "start": "NODE_ENV=production node ./server/bin/www.js",
+    "dev": "DEBUG=dwssr-2026b:* nodemon ./server/bin/www.js",
     "dev:vite": "vite",
     "dev:all": "concurrently \"npm run dev\" \"npm run dev:vite\"",
     "build": "vite build",
@@ -26,7 +26,8 @@
     "vite": "^8.3.2"
   },
   "imports": {
-    "#server/*": "./server/*",
-    "#routes/*": "./server/routes/*"
+  "#server/*": "./server/*",
+  "#routes/*": "./server/routes/*",
+  "#lib/*": "./server/lib/*"
   }
 }
