@@ -76,6 +76,14 @@ app.use(function(err, req, res, _next) {
   res.status(err.status || 500);
   res.render('error');
 });
+//ejemplo de codigo inalcansable
+//(()=>{
+  //let age =10
+  //return age
+  //if (age == 10) {
+  //  console.log("codigo")
+  //}
+//})()
 
 //module.exports = app;
 export default app;
