@@ -1,4 +1,7 @@
 {
     "workbench.colorTheme": "GitHub Dark Default",
-    "editor.mouseWheelZoom": true
+    "editor.mouseWheelZoom": true,
+    "editor.fontSize": 14,
+    "terminal.integrated.fontSize": 14,
+    "editor.tabSize": 4
 }
