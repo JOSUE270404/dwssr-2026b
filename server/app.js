@@ -3,7 +3,7 @@ import createError from 'http-errors';
 //importa el framework express
 import express from 'express';
 //importa modulos para manejar rutas, cookies, logs y path
-import path from 'node:path';
+import path, { dirname } from 'node:path';
 //importa modulos para manejar cookies
 import cookieParser from 'cookie-parser';
 //importa modulos para manejar logs
@@ -12,9 +12,17 @@ import logger from 'morgan';
 import createDebug from "debug" //👈
 //imports para crear Dirname
 import { fileURLToPath } from 'node:url';
-import{dirname} from 'node:path';
 //importando el template de engine Handlebars
 import hbs from 'hbs';
+
+//importa las rutas de laaplicacion 
+//var indexRouter = require('./routes/index');
+import indexRouter from '#routes/index.js';
+
+//var usersRouter = require('./routes/users');
+import usersRouter from '#routes/users.js';
+//importando el registrador del helper 
+import { registerViteAssetsHelper } from './lib/vite.js';
 
 //creacion del objeto Debug
 const debug = createDebug('dwssr-2026b:server'); //👈
@@ -22,17 +30,9 @@ const debug = createDebug('dwssr-2026b:server'); //👈
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-//importa las rutas de laaplicacion 
-//var indexRouter = require('./routes/index');
-import indexRouter from '#routes/index.js';
-//var usersRouter = require('./routes/users');
-import usersRouter from '#routes/users.js';
-//importando el registrador del helper 
-import { registerViteAssetsHelper } from '#lib/vite.js';
-
 //crea la aplicacion express
 debug('🧨Creando backend')
-var app = express();
+const app = express();
 
 
 // configura el motor de vistas
@@ -62,12 +62,12 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use((req, res, next) => {
   next(createError(404));
 });
 
 // Manejador de errores 
-app.use(function(err, req, res, _next) {
+app.use((err, req, res, _next) => {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};

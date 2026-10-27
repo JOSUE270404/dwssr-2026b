@@ -1,10 +1,19 @@
 import express from 'express';
-const router = express.Router();
 
-/* GET users listing. */
-router.get('/', function(req, res, _next) {
-  res.send('<h1>LISTA DE USUARIOS</h1>');
+const usersRouter = express.Router();
+
+let counter = 0;
+const numbers = [];
+
+usersRouter.get('/', (req, res) => {
+  counter += 1;
+  numbers.push(counter);
+
+  res.render('index', {
+    title: 'Josue Alcantara',
+    counter,
+    numbers,
+  });
 });
 
-//module.exports = router;
-export default router;
+export default usersRouter;

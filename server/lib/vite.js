@@ -1,4 +1,3 @@
-// Utilidades de archivos y rutas
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -6,10 +5,8 @@ import { fileURLToPath } from 'node:url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-/*
- * Genera las etiquetas de Vite.
- * Desarrollo: utiliza el servidor de Vite.
- * Producción: utiliza los archivos compilados.
+/**
+ * Genera las etiquetas de Vite para desarrollo o producción.
  */
 export function viteAssets() {
   const isDev = process.env.NODE_ENV !== 'production';
@@ -31,9 +28,10 @@ export function viteAssets() {
   );
 
   if (!fs.existsSync(manifestPath)) {
-    console.warn(
-      'No se encontró el manifiesto de Vite. Ejecuta npm run build.'
+    process.stderr.write(
+      'No se encontró el manifiesto de Vite. Ejecuta npm run build.\n'
     );
+
     return '';
   }
 
@@ -44,53 +42,58 @@ export function viteAssets() {
   const mainEntry = manifest['main.js'];
 
   if (!mainEntry) {
-    console.warn(
-      'No se encontró main.js en el manifiesto de Vite.'
+    process.stderr.write(
+      'No se encontró main.js en el manifiesto de Vite.\n'
     );
+
     return '';
   }
 
-  // Incluye los estilos de la entrada y sus dependencias.
   const cssFiles = new Set();
   const visited = new Set();
 
+  /**
+   * Recopila estilos sin repetir archivos ni recorrer ciclos.
+   */
   function collectStyles(entry) {
-    for (const cssFile of entry.css || []) {
+    (entry.css || []).forEach((cssFile) => {
       cssFiles.add(cssFile);
-    }
+    });
 
-    for (const importKey of entry.imports || []) {
-      if (visited.has(importKey)) continue;
-      visited.add(importKey);
+    (entry.imports || []).forEach((importKey) => {
+      if (!visited.has(importKey)) {
+        visited.add(importKey);
 
-      const importedEntry = manifest[importKey];
+        const importedEntry = manifest[importKey];
 
-      if (importedEntry) {
-        collectStyles(importedEntry);
+        if (importedEntry) {
+          collectStyles(importedEntry);
+        }
       }
-    }
+    });
   }
 
   collectStyles(mainEntry);
 
-  let tags = '';
+  const styleTags = Array.from(cssFiles)
+    .map((cssFile) => `<link rel="stylesheet" href="/${cssFile}">`)
+    .join('\n');
 
-  for (const cssFile of cssFiles) {
-    tags += `<link rel="stylesheet" href="/${cssFile}">\n`;
-  }
+  const scriptTag = (
+    `<script type="module" src="/${mainEntry.file}"></script>`
+  );
 
-  tags += `<script type="module" src="/${mainEntry.file}"></script>`;
-
-  return tags;
+  return [styleTags, scriptTag].filter(Boolean).join('\n');
 }
 
-/*
- * Registra el helper con el nombre que importa server/app.js.
+/**
+ * Registra el helper que utiliza server/app.js.
  */
 export function registerViteAssetsHelper(hbs) {
-  hbs.registerHelper('viteAssets', () => {
-    return new hbs.SafeString(viteAssets());
-  });
+  hbs.registerHelper(
+    'viteAssets',
+    () => new hbs.SafeString(viteAssets())
+  );
 }
 
 // Conserva compatibilidad con el nombre anterior.
