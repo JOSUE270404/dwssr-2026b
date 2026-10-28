@@ -63,6 +63,12 @@ export default defineConfig([
       ],
     },
   },
+  {
+    files: ['src/**/*{js,msj}'],
+    rules:{
+      'no-console':['warn',{allow: ['warn','error', 'info']}]
+    },
+  },
   // Siempre al final: desactiva reglas que chocan con Prettier
   prettier,
 ]);
