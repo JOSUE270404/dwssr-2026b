@@ -18,11 +18,12 @@ import hbs from 'hbs';
 //importa las rutas de laaplicacion 
 //var indexRouter = require('./routes/index');
 import indexRouter from '#routes/index.js';
-
 //var usersRouter = require('./routes/users');
 import usersRouter from '#routes/users.js';
 //importando el registrador del helper 
 import { registerViteAssetsHelper } from './lib/vite.js';
+//importando la configuracion de winston logger
+import logger from "./lib/Winston.js" 
 
 //creacion del objeto Debug
 const debug = createDebug('dwssr-2026b:server'); //👈
@@ -34,7 +35,6 @@ const __dirname = dirname(__filename);
 debug('🧨Creando backend')
 const app = express();
 
-
 // configura el motor de vistas
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
@@ -42,7 +42,7 @@ app.set('view engine', 'hbs');
 registerViteAssetsHelper(hbs);
 
 //configura los middlewares de la aplicacion (software intermedio que se ejecuta antes de las rutas)
-app.use(morgan('dev'));
+app.use(morgan('dev'),{stream:{write: (msg)=>logger.info(msg.trim())}});
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
