@@ -42,7 +42,13 @@ app.set('view engine', 'hbs');
 registerViteAssetsHelper(hbs);
 
 //configura los middlewares de la aplicacion (software intermedio que se ejecuta antes de las rutas)
-app.use(morgan('dev'),{stream:{write: (msg)=>logger.info(msg.trim())}});
+app.use(
+  morgan('dev', {
+    stream: {
+      write: (msg) => logger.info(msg.trim()),
+    },
+  }),
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
