@@ -76,7 +76,7 @@ format: myConsoleFormat,
   },
 
   readableFile: {
-
+    
     level: "info",
     filename: path.join(logDir,"readable.log"),
     maxsize: 5242880, //5mb
