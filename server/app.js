@@ -1,74 +1,55 @@
-//funcion para mejerar errores en la aplicación
+//Función para manejar errores de la aplicación
 import createError from 'http-errors';
-//importa el framework express
+//Importar el framework Express
 import express from 'express';
-//importa modulos para manejar rutas, cookies, logs y path
+//Importa módulos para manejar rutas
 import path, { dirname } from 'node:path';
-//importa modulos para manejar cookies
+//Importar módulos para manejar cookis
 import cookieParser from 'cookie-parser';
-//importa modulos para manejar logs
+//Importar módulos para manejar logs
 import morgan from 'morgan';
-//importando biblioteca de debug
-//import createDebug from "debug" //👈
-//imports para crear Dirname
+//Importando biblioteca de debug 👍
+//Imports para crear dirname 
 import { fileURLToPath } from 'node:url';
-//importando el template de engine Handlebars
-import hbs from 'hbs';
 
-//importa las rutas de laaplicacion 
+//Se importan las rutas de la aplicación 
 //var indexRouter = require('./routes/index');
 import indexRouter from '#routes/index.js';
 //var usersRouter = require('./routes/users');
 import usersRouter from '#routes/users.js';
-//importando el registrador del helper 
-import { registerViteAssetsHelper } from './lib/vite.js';
-//importando la configuracion de winston logger
-import logger from "./lib/Winston.js";
-
-//creacion del objeto Debug
-//const debug = createDebug('dwssr-2026b:server'); //👈
-//creando la variable
+//Importando la función de configuración de handlebars
+import configureHandlebars from './lib/handlebars.js';
+//Importando la configuración de winston logger
+import logger from './lib/Winston.js';
+//Creando la variable
+//Creando variables de rutas
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-//crea la aplicacion express
-//debug('🧨Creando backend')
-logger.debug("🧨Creando backend")
-logger.info("🧨Creando backend")
+//Se crea la aplicación Express
+logger.info("🔨Creando backend");
 const app = express();
 
-// configura el motor de vistas
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'hbs');
-//Registro Helper
-registerViteAssetsHelper(hbs);
+// Configurar el motor de vistas con hbs
+configureHandlebars(app);
 
-//configura los middlewares de la aplicacion (software intermedio que se ejecuta antes de las rutas)
-app.use(
-  morgan('dev', {
-    stream: {
-      write: (msg) => logger.info(msg.trim()),
-    },
-  }),
-);
+//Configuración de middlewares para manejar solicitudes HTTP
+app.use(morgan('dev',{
+  stream: { 
+    write: (msg) => logger.info(msg.trim()) 
+  }}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-
-//archivos estaticos de la produccion
-if (process.env.NODE_ENV === 'production') {
-app.use(express.static(path.join(__dirname,'..', 'dist')));
+//Archivos estáticos para producción
+if(process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '..', 'dist')));
 }
-
-//configura la carpeta de archivos estaticos
-//debug('🧨Creando servidor de archivos estaticos')
-logger.debug("🧨Creando servidor de archivos estaticos")
-logger.info("🧨Creando servidor de archivos estaticos")
-app.use(express.static(path.join(__dirname,'..', 'public')));
-
-//registrando las rutass de la aplicacion
-//debug('🛣️Registrando rutas')
-logger.debug("🛣️Registrando rutas")
+//Configuración de la carpeta pública para servir archivos estáticos
+logger.info("🔨 Creando servidor de archivos estáticos");
+app.use(express.static(path.join(__dirname, '..', 'public')));
+//Registramos las rutas de la aplicación
+logger.info("🛣️ Registrando rutas");
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
@@ -77,8 +58,8 @@ app.use((req, res, next) => {
   next(createError(404));
 });
 
-// Manejador de errores 
-app.use((err, req, res, _next) => {
+// Manejador de errores
+app.use((err, req, res, _next) => { 
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
@@ -87,14 +68,6 @@ app.use((err, req, res, _next) => {
   res.status(err.status || 500);
   res.render('error');
 });
-//ejemplo de codigo inalcansable
-//(()=>{
-  //let age =10
-  //return age
-  //if (age == 10) {
-  //  console.log("codigo")
-  //}
-//})()
 
 //module.exports = app;
 export default app;
