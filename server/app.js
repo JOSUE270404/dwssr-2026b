@@ -20,7 +20,7 @@ import usersRouter from '#routes/users.js';
 //Importando la función de configuración de handlebars
 import configureHandlebars from './lib/handlebars.js';
 //Importando la configuración de winston logger
-import logger from './lib/Winston.js';
+import logger from "./lib/Winston.js"
 //Creando la variable
 //Creando variables de rutas
 const __filename = fileURLToPath(import.meta.url);
@@ -62,7 +62,10 @@ app.use((req, res, next) => {
 app.use((err, req, res, _next) => { 
   // set locals, only providing error in development
   res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+  res.locals.error = req.app.get('env') === 'development' ? {
+    status: err.status || 500,
+    stack: err.stack  
+  } : {};
 
   // render the error page
   res.status(err.status || 500);
