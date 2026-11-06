@@ -17,7 +17,7 @@ const exphbs = createHbsEngine({
 });
 
 //registrando el helper de vite 
-registerViteHelper(exphbs.handerbars);
+registerViteHelper(exphbs.handlebars);
 
 
 
