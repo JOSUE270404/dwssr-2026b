@@ -1,19 +1,5 @@
-import express from 'express';
+import usersRouter from '../modules/users/users.routes.js';
 
-const usersRouter = express.Router();
 
-let counter = 0;
-const numbers = [];
-
-usersRouter.get('/', (req, res) => {
-  counter += 1;
-  numbers.push(counter);
-
-  res.render('index', {
-    title: 'Josue Alcantara',
-    counter,
-    numbers,
-  });
-});
-
+//Enrutando el modulo de usuarios
 export default usersRouter;

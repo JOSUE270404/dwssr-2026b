@@ -13,9 +13,7 @@ import morgan from 'morgan';
 import { fileURLToPath } from 'node:url';
 
 //Se importan las rutas de la aplicación 
-//var indexRouter = require('./routes/index');
-import indexRouter from '#routes/index.js';
-//var usersRouter = require('./routes/users');
+import homeRouter from '#routes/index.js';
 import usersRouter from '#routes/users.js';
 //Importando la función de configuración de handlebars
 import configureHandlebars from './lib/handlebars.js';
@@ -50,7 +48,7 @@ logger.info("🔨 Creando servidor de archivos estáticos");
 app.use(express.static(path.join(__dirname, '..', 'public')));
 //Registramos las rutas de la aplicación
 logger.info("🛣️ Registrando rutas");
-app.use('/', indexRouter);
+app.use('/', homeRouter);
 app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
